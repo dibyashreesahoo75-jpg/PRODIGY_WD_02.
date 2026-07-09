@@ -1,0 +1,194 @@
+{% extends 'employees/base.html' %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold">Employee Dashboard</h2>
+        <p class="text-muted">Manage all employee records efficiently.</p>
+    </div>
+
+    <a href="{% url 'add_employee' %}" class="btn btn-primary btn-lg">
+        <i class="bi bi-plus-circle"></i> Add Employee
+    </a>
+</div>
+
+<!-- Dashboard Cards -->
+<div class="row mb-4">
+
+    <div class="col-md-6 mb-3">
+        <div class="card shadow border-0 bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6>Total Employees</h6>
+                        <h2>{{ total_employees }}</h2>
+                    </div>
+                    <i class="bi bi-people-fill fs-1"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <div class="card shadow border-0 bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6>Total Departments</h6>
+                        <h2>{{ total_departments }}</h2>
+                    </div>
+                    <i class="bi bi-building fs-1"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Search -->
+<div class="card shadow border-0 mb-4">
+    <div class="card-body">
+        <form method="GET">
+            <div class="input-group">
+                <input type="text"
+                       name="q"
+                       class="form-control"
+                       placeholder="Search employee by name..."
+                       value="{{ query|default:'' }}">
+
+                <button class="btn btn-dark" type="submit">
+                    <i class="bi bi-search"></i> Search
+                </button>
+
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                    Reset
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Employee Table -->
+<div class="card shadow border-0">
+
+    <div class="card-header bg-dark text-white">
+        <h4 class="mb-0">
+            <i class="bi bi-table"></i> Employee List
+        </h4>
+    </div>
+
+    <div class="card-body table-responsive">
+        <table class="table table-hover table-striped align-middle">
+
+            <thead class="table-primary">
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Department</th>
+                    <th>Designation</th>
+                    <th>Salary</th>
+                    <th>Joining Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for employee in employees %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td class="fw-bold">{{ employee.name }}</td>
+                    <td>{{ employee.email }}</td>
+                    <td>{{ employee.phone }}</td>
+
+                    <td>
+                        <span class="badge bg-info text-dark">
+                            {{ employee.department }}
+                        </span>
+                    </td>
+
+                    <td>{{ employee.designation }}</td>
+
+                    <td class="text-success fw-bold">
+                        ₹{{ employee.salary }}
+                    </td>
+
+                    <td>{{ employee.joining_date }}</td>
+
+                    <td>
+                        <a href="{% url 'edit_employee' employee.id %}" class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil-square"></i> Edit
+                        </a>
+
+                        <a href="{% url 'delete_employee' employee.id %}" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i> Delete
+                        </a>
+                    </td>
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="9" class="text-center py-4 text-muted">
+                        No employees found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link"
+               href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">
+                Previous
+            </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">Previous</span>
+        </li>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+            <li class="page-item active">
+                <span class="page-link">{{ num }}</span>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link"
+                   href="?page={{ num }}{% if query %}&q={{ query }}{% endif %}">
+                    {{ num }}
+                </a>
+            </li>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link"
+               href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">
+                Next
+            </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">Next</span>
+        </li>
+        {% endif %}
+
+    </ul>
+</nav>
+{% endif %}
+
+{% endblock %}
