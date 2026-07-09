@@ -53,19 +53,21 @@ employee_management/
 
 ### Login Page
 
-(Add your login screenshot here)
+![Login](screenshots/login.png)
 
 ### Dashboard
 
-(Add your dashboard screenshot here)
+## Dashboard
+
+![Dashboard](screenshots/dashboard.png)
 
 ### Add Employee
 
-(Add your add employee screenshot here)
+![Add employee](screenshots/addemployee.png)
 
 ### Edit Employee
 
-(Add your edit employee screenshot here)
+![Edit](screenshots/edit.png)
 
 ---
 
