@@ -59,7 +59,7 @@ employee_management/
 
 ## Dashboard
 
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](screenshots/Dashboard.png)
 
 ### Add Employee
 
